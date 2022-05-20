@@ -1,34 +1,28 @@
 #include "../include/misc.h"
 #include <math.h>
 
-uint8_t* reverse(uint8_t * arr, uint n) 
-{ 
-	uint8_t * arr_res = (uint8_t *)malloc(sizeof(uint8_t) * n);
+uint8_t* reverse(uint8_t* segment, uint length){ 
+	uint8_t * reversed_segment = (uint8_t *)malloc(sizeof(uint8_t) * length);
 	uint8_t tmp;
-    for (uint i=0; i<=n/2; i++){
-    	tmp = arr[i];
-    	arr_res[i] = arr[n -i -1];
-    	arr_res[n -i -1] = tmp;
+    for (uint i=0; i<length/2; i++){ /* it was originally i <= length/2 */
+    	tmp = segment[i];
+    	reversed_segment[i] = segment[length - i - 1];
+    	reversed_segment[length - i - 1] = tmp;
     }
-    return arr_res;
+    return reversed_segment;
 } 
 
 struct padded_str_s create_padded_str(char* new_f, char* old_f){
-
-    uint l1,l2,l3,l4,l5;
-
-    struct stat sb1,sb2;
+    uint l1,l2,l3,l4,l5; /*The padded str limits*/
+    struct stat sb1, sb2;
     int fdNew = open(new_f, O_RDONLY);
-    int fdOld = open(old_f, O_RDONLY);
-
-    fstat(fdNew, &sb1); 
+    int fdOld = open(old_f, O_RDONLY); /*getting the file descriptors of the two files.*/
+    fstat(fdNew, &sb1);
     fstat(fdOld, &sb2);
-
     uint8_t * memNew = (uint8_t*)mmap(NULL, sb1.st_size, PROT_READ, MAP_PRIVATE, fdNew, 0);
     uint8_t * memOld = (uint8_t*)mmap(NULL, sb2.st_size, PROT_READ, MAP_PRIVATE, fdOld, 0);
-    
-    close(fdNew); 
-    close(fdOld); 
+    close(fdNew);
+    close(fdOld);
 
     l1 = 0;
     l2 = (uint)sb2.st_size;
@@ -45,12 +39,10 @@ struct padded_str_s create_padded_str(char* new_f, char* old_f){
     memcpy(padded_str + l2, memOld, sb2.st_size);
     memcpy(padded_str + l3, memNew, sb1.st_size);
     memcpy(padded_str + l4, new_reverse, sb1.st_size);
-
     free(new_reverse);
     free(old_reverse);
 
     struct padded_str_s ret;
-
     ret.padded_str = padded_str;
     ret.padded_length = l5;
     ret.new_f = memNew;
@@ -61,10 +53,13 @@ struct padded_str_s create_padded_str(char* new_f, char* old_f){
     ret.lims.lim4 = l4;
     ret.lims.lim5 = l5;
     munmap(memOld, sb2.st_size);
-    /* Do not munmap memNew because it is used later */
+    /*
+       Do not munmap memNew because it is used later durin the diff creating process, as
+       it is stored in ret.new_f.
+    */
     return ret;
 }
-
+/*
 
 uint compute_cost(struct command* commands, int num_of_commands){
     int cost = 0;
@@ -114,7 +109,7 @@ void write_delta_script(char* fname, struct proc_commands c_coms,uint len_new){
     uint32_t len = len_new;
 
 
-    fwrite(&len, 3, 1, fp);                                         /* FILE WRITE 3B */
+    fwrite(&len, 3, 1, fp);                                         // FILE WRITE 3B 
 
     uint coms_singletons = 0;
 
@@ -127,8 +122,8 @@ void write_delta_script(char* fname, struct proc_commands c_coms,uint len_new){
 
     uint32_t valid_coms = ceil((num_of_commands - coms_singletons)/8.0) ;
 
-    fwrite(&coms_singletons,3, 1, fp);                              /* FILE WRITE 2B */    
-    fwrite(&valid_coms, 3, 1, fp);                                  /* FILE WRITE 2B */
+    fwrite(&coms_singletons,3, 1, fp);                             // FILE WRITE 2B    
+    fwrite(&valid_coms, 3, 1, fp);                                // FILE WRITE 2B 
 
     int iv = 0;
     int xv = 0;
@@ -223,3 +218,5 @@ void print_info(){
     fclose(fp);
     return;
 }
+
+*/

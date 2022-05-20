@@ -19,9 +19,7 @@
 */
 
 
-
-
-struct padded_str_s create_padded_str(char* new_f, char* old_f);
+struct padded_str_s create_padded_str(char*, char*);
 
 /*
 uint compute_cost(struct command* commands, int num_of_commands);

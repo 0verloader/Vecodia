@@ -1,5 +1,5 @@
 /********************************************************************************
-* Author  : Konstantinos Arakadakis                                             *
+* Author: Konstantinos Arakadakis                                               *
 * Last Modified: 18/5/2022                                                      *
 *********************************************************************************
 *                                                                               *
@@ -19,6 +19,7 @@
 
 
 #include "include/misc.h"
+#include "include/suffix_array.h"
 
 /*
 #include "include/suffix_array.h"
@@ -40,6 +41,7 @@
 #define LEGACY 1
 #define SUDO_MAX_PATH 4096
 #define VERBOSE 1
+#define DEFAULT_DELTA_BIN "./delta.bin"
 /*******************************************************************************/
 int main(int argc, char **argv){
 
@@ -47,7 +49,7 @@ int main(int argc, char **argv){
   int executables = 1;
   char* legacy_f = NULL;
   char* update_f = NULL;
-  char* delta_f = strdup("./delta.bin");
+  char* delta_f = strdup(DEFAULT_DELTA_BIN);
   FILE *fp1, *fp2, *fp3;
   uint8_t stop = 0;
   opterr = 0;
@@ -183,12 +185,15 @@ int main(int argc, char **argv){
                   delta_f, abs_delta_f);
 
   fprintf(stdout, "Executables-oriented: %d\n", executables);
-
   fprintf(stdout, "Operation: ");
   reconstruction == 1 ? printf("Reconstruction\n") : printf("Delta computation\n");
   #endif
 
-  struct padded_str_s padded_ret = create_padded_str(update_f, legacy_f); 
+  struct padded_str_s padded_ret = create_padded_str(update_f, legacy_f);
+
+  uint* suffixArr = buildSuffixArray(padded_ret.padded_str, padded_ret.padded_length);
+  uint* rankArr   = buildRankArray(suffixArr, padded_ret.padded_length); 
+  uint* lcpArr    = buildLCPArray(suffixArr, rankArr, padded_ret.padded_str, padded_ret.padded_length);
 
 
   return EXIT_SUCCESS;
