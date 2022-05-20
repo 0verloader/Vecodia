@@ -17,8 +17,10 @@
 * updated file, progressively reconstrution the update file version, locally.   *
 ********************************************************************************/
 
-/*
+
 #include "include/misc.h"
+
+/*
 #include "include/suffix_array.h"
 #include "include/commands_computation.h"
 #include "include/reconstruct.h"
@@ -184,7 +186,10 @@ int main(int argc, char **argv){
 
   fprintf(stdout, "Operation: ");
   reconstruction == 1 ? printf("Reconstruction\n") : printf("Delta computation\n");
-
   #endif
+
+  struct padded_str_s padded_ret = create_padded_str(update_f, legacy_f); 
+
+
   return EXIT_SUCCESS;
 }
