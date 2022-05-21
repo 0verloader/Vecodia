@@ -47,6 +47,7 @@ int main(int argc, char **argv){
 
   int reconstruction = 0;
   int executables = 1;
+  int in_place = 0;
   char* legacy_f = NULL;
   char* update_f = NULL;
   char* delta_f = strdup(DEFAULT_DELTA_BIN);
@@ -80,6 +81,8 @@ int main(int argc, char **argv){
     { "reconstruction",                 0, NULL, 'r' },
     { "executables-oriented",           0, NULL, 'e' },
     { "generic",                        0, NULL, 'g' },
+    { "in-place",                       0, NULL, 'i' },
+    { "out-of-place",                   0, NULL, 'o' },
     { "legacy-file",                    1, NULL, 'l' },
     { "update-file",                    1, NULL, 'u' },
     { "delta-file",                     1, NULL, 'd' },
@@ -102,6 +105,14 @@ int main(int argc, char **argv){
         reconstruction = 1;
         break;
 
+      case 'i':
+        in_place = 1;
+        break;
+
+      case 'o':
+        in_place = 0;
+        break;
+      
       case 'e':
         executables = 1;
         break;
