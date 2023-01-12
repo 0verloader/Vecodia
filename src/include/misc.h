@@ -18,13 +18,12 @@
 +--------------+-----+
 */
 
-
 struct padded_str_s create_padded_str(char*, char*);
+void write_delta_script(char*, struct proc_commands, uint);
 
 /*
 uint compute_cost(struct command* commands, int num_of_commands);
 void print_command(struct command c);
-void write_delta_script(char* fname, struct proc_commands cc, uint len_new);
 void print_info();
 */
 

@@ -59,7 +59,7 @@ struct padded_str_s create_padded_str(char* new_f, char* old_f){
     */
     return ret;
 }
-/*
+
 
 uint compute_cost(struct command* commands, int num_of_commands){
     int cost = 0;
@@ -99,7 +99,6 @@ void print_command(struct command c){
 
 
 void write_delta_script(char* fname, struct proc_commands c_coms,uint len_new){
-
  	struct command* commands = c_coms.final_commands;
  	uint num_of_commands = c_coms.num_of_commands;
     struct command tmp;
@@ -107,7 +106,6 @@ void write_delta_script(char* fname, struct proc_commands c_coms,uint len_new){
     FILE *fp;
     fp = fopen(fname,"wb");  // w for write, b for binary
     uint32_t len = len_new;
-
 
     fwrite(&len, 3, 1, fp);                                         // FILE WRITE 3B 
 
@@ -122,7 +120,7 @@ void write_delta_script(char* fname, struct proc_commands c_coms,uint len_new){
 
     uint32_t valid_coms = ceil((num_of_commands - coms_singletons)/8.0) ;
 
-    fwrite(&coms_singletons,3, 1, fp);                             // FILE WRITE 2B    
+    fwrite(&coms_singletons,3, 1, fp);                            // FILE WRITE 2B    
     fwrite(&valid_coms, 3, 1, fp);                                // FILE WRITE 2B 
 
     int iv = 0;
@@ -187,36 +185,9 @@ void write_delta_script(char* fname, struct proc_commands c_coms,uint len_new){
     
     fclose(fp);
 
-
 	printf("Delta  : %d\nUpdate : %d\n", 
 		compute_cost(commands, num_of_commands) +
 		coms_singletons + valid_coms + 9
 		,
 		len_new);
-
 }
-
-
-void print_info(){
-    FILE *fp;
-    char * line = NULL;
-    ssize_t read;
-
-    size_t len = 0;
-
-    fp = fopen("INFO_VER", "r"); // read mode
-
-    if (fp == NULL)
-    {
-      perror("Error reading INFO_VER file.\n");
-      exit(1);
-    }
-
-    while ((read = getline(&line, &len, fp)) != -1) 
-        printf(" %s", line);
-
-    fclose(fp);
-    return;
-}
-
-*/
